@@ -7,6 +7,8 @@ import org.bson.Document;
 
 public class Article {
 	
+	public static final String acceptedChars = "abcdefghijklmnopqrstuvwxyz1234567890-";
+	
 	private String doi;
 	private String idArticle;
 	private String journal;
@@ -60,8 +62,10 @@ public class Article {
 		} else {
 			idArticle = generateUniqueID(this);
 		}
+		idArticle = idArticle.toLowerCase();
+		idArticle = cleanSpecialChars(idArticle);
 	}
-	
+
 	public static String generateUniqueID(Article article) {
 		String result = "";
 		String[] nameP = article.getTitle().split(" ");
@@ -82,6 +86,16 @@ public class Article {
 			result += article.getYear();
 		}
 		return result.trim().replaceAll("/", "-");
+	}
+	
+	public String cleanSpecialChars(String idArticle) {
+		String result = "";
+		for(char c:idArticle.toCharArray()) {
+			if(acceptedChars.contains("" + c)) {
+				result += c;
+			}
+		}
+		return result;
 	}
 	
 	public static Article completeData(Article article, Map<String, Object> data) {
