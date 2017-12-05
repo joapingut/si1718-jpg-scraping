@@ -142,13 +142,25 @@ public class ArticlesScrapper {
 				}
 				sibling = sibling.nextElementSibling();
 			} while(sibling != null);
-			System.out.println("PERSON " + person + " FIN, Articles: " + articlesList.size());
+			System.out.println("PERSON " + person + " FIN, Articles: " + articlesList.size()); 
+			List<Article> filterList = new ArrayList<Article>();
 			for(Article art:articlesList) {
 				if(art.getIdArticle() == null || art.getIdArticle().isEmpty()) {
 					System.out.println("ERROR, article has no id: " + art);
+				} else {
+					boolean out = false;
+					for(Article irt:filterList) {
+						if(irt.getIdArticle().equals(art.getIdArticle())) {
+							out = true;
+							break;
+						}
+					}
+					if(!out && !DataBaseConnector.existArticle(art)) {
+						filterList.add(art);
+					}
 				}
 			}
-			DataBaseConnector.insertListOfArticles(articlesList);
+			DataBaseConnector.insertListOfArticles(filterList);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package web.scraping.jsoup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import org.bson.Document;
 
 public class Article {
 	
-	public static final String acceptedChars = "abcdefghijklmnopqrstuvwxyz1234567890-";
+	public static final String acceptedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-";
 	
 	private String doi;
 	private String idArticle;
@@ -22,6 +23,9 @@ public class Article {
 	private String comments;
 	
 	public static Document articleToDocument(Article article) {
+		if(article.getTitle() == null) {
+			System.out.println("cat");
+		}
 		Document doc = new Document("idArticle", article.getIdArticle())
                 .append("doi", article.getDoi())
                 .append("journal", article.getJournal())
@@ -33,6 +37,12 @@ public class Article {
                 .append("lastPage", article.getLastPage())
                 .append("comments", article.getComments())
                 .append("authors", article.getAuthors());
+		List<Document> authors = new ArrayList<Document>();
+		for(String author:article.getAuthors()) {
+			Document authorDoc = new Document("name", author);
+			authors.add(authorDoc);
+		}
+		doc.append("authors", authors);
 		return doc;
 	}
 	
@@ -71,14 +81,14 @@ public class Article {
 		String[] nameP = article.getTitle().split(" ");
 		for(String name:nameP) {
 			if(!name.isEmpty()) {
-				result += name.charAt(0);
+				result += name;
 			}
 		}
 		if(article.getJournal() != null) {
 			String[] journalP = article.getJournal().split(" ");
 			for(String name:journalP) {
 				if(!name.isEmpty()) {
-					result += name.charAt(0);
+					result += name;
 				}
 			}
 		}

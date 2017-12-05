@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
-
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 public class DataBaseConnector {
 	
@@ -39,6 +40,18 @@ public class DataBaseConnector {
 		if (insertList != null && !insertList.isEmpty()) {
 			collection.insertMany(insertList);
 		}
+	}
+	
+	public static boolean existArticle(Article article) {
+		if (collection == null) {
+			openConnection();
+		}
+		
+		FindIterable<Document> result = collection.find(Filters.eq("idArticle", article.getIdArticle()));
+		if(result != null && result.first() != null) {
+			return true;
+		}
+		return false;
 	}
 
 }
