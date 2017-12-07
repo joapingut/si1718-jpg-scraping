@@ -17,7 +17,7 @@ public class DataBaseConnector {
 	private static MongoClient mongoClient;
 	
 	public static void openConnection() {
-		MongoClientURI connectionString = new MongoClientURI("mongodb");
+		MongoClientURI connectionString = new MongoClientURI(System.getenv("MONGO_DATABASE_URL"));
 		MongoClient mongoClient = new MongoClient(connectionString);
 		MongoDatabase database = mongoClient.getDatabase("si1718-jpg-publications");
 		MongoCollection<Document> collection = database.getCollection("articles");
