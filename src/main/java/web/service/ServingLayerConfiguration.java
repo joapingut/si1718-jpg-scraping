@@ -1,7 +1,5 @@
 package web.service;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
